@@ -403,42 +403,73 @@ _Toolsets are not limited to Tools. Relevant MCP Resources and Prompts are also 
 When no toolsets are specified, [default toolsets](#default-toolset) are used.
 
 > **Looking for examples?** See the [Server Configuration Guide](./docs/server-configuration.md) for common recipes like minimal setups, read-only mode, and combining tools with toolsets.
+>
+> **New:** You can now use [configuration files](./docs/config-file.md) (YAML or JSON) to manage all server settings in one place, instead of using multiple flags or environment variables.
 
 #### Specifying Toolsets
 
-To specify toolsets you want available to the LLM, you can pass an allow-list in two ways:
+To specify toolsets you want available to the LLM, you can pass an allow-list in three ways:
 
-1. **Using Command Line Argument**:
+1. **Using a Configuration File** (recommended for complex setups):
+
+   ```yaml
+   # github-mcp-server.yaml
+   personal_access_token: "ghp_..."
+   toolsets:
+     - repos
+     - issues
+     - pull_requests
+     - actions
+     - code_security
+   ```
+
+   Then run: `github-mcp-server stdio` (auto-discovers config) or `github-mcp-server stdio --config path/to/config.yaml`
+
+   See the [Configuration File Guide](./docs/config-file.md) for complete details.
+
+2. **Using Command Line Argument**:
 
    ```bash
    github-mcp-server --toolsets repos,issues,pull_requests,actions,code_security
    ```
 
-2. **Using Environment Variable**:
+3. **Using Environment Variable**:
 
    ```bash
    GITHUB_TOOLSETS="repos,issues,pull_requests,actions,code_security" ./github-mcp-server
    ```
 
-The environment variable `GITHUB_TOOLSETS` takes precedence over the command line argument if both are provided.
+The environment variable `GITHUB_TOOLSETS` takes precedence over the command line argument if both are provided. Configuration files are overridden by both environment variables and command-line flags.
 
 #### Specifying Individual Tools
 
-You can also configure specific tools using the `--tools` flag. Tools can be used independently or combined with toolsets and dynamic toolsets discovery for fine-grained control.
+You can also configure specific tools using the `--tools` flag or config file. Tools can be used independently or combined with toolsets and dynamic toolsets discovery for fine-grained control.
 
-1. **Using Command Line Argument**:
+1. **Using a Configuration File**:
+
+   ```yaml
+   # github-mcp-server.yaml
+   tools:
+     - get_file_contents
+     - issue_read
+     - create_pull_request
+   ```
+
+2. **Using Command Line Argument**:
 
    ```bash
    github-mcp-server --tools get_file_contents,issue_read,create_pull_request
    ```
 
-2. **Using Environment Variable**:
+3. **Using Environment Variable**:
 
    ```bash
    GITHUB_TOOLS="get_file_contents,issue_read,create_pull_request" ./github-mcp-server
    ```
 
-3. **Combining with Toolsets** (additive):
+4. **Combining with Toolsets** (additive):
+
+4. **Combining with Toolsets** (additive):
 
    ```bash
    github-mcp-server --toolsets repos,issues --tools get_gist
@@ -446,7 +477,7 @@ You can also configure specific tools using the `--tools` flag. Tools can be use
 
    This registers all tools from `repos` and `issues` toolsets, plus `get_gist`.
 
-4. **Combining with Dynamic Toolsets** (additive):
+5. **Combining with Dynamic Toolsets** (additive):
 
    ```bash
    github-mcp-server --tools get_file_contents --dynamic-toolsets
