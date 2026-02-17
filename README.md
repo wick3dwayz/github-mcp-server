@@ -469,8 +469,6 @@ You can also configure specific tools using the `--tools` flag or config file. T
 
 4. **Combining with Toolsets** (additive):
 
-4. **Combining with Toolsets** (additive):
-
    ```bash
    github-mcp-server --toolsets repos,issues --tools get_gist
    ```
