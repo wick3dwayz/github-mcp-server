@@ -32,3 +32,8 @@ ui/node_modules/
 pkg/github/ui_dist/*
 !pkg/github/ui_dist/.gitkeep
 !pkg/github/ui_dist/.placeholder.html
+
+# Configuration files (keep .example files)
+github-mcp-server.yaml
+github-mcp-server.yml
+github-mcp-server.json

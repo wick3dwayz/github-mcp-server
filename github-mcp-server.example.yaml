@@ -1,0 +1,98 @@
+# GitHub MCP Server Configuration File Example
+# This file demonstrates all available configuration options
+# You can place this file in one of the following locations:
+#   - Current directory: ./github-mcp-server.yaml
+#   - Home directory: ~/github-mcp-server.yaml
+#   - Home config directory: ~/.config/github-mcp-server/github-mcp-server.yaml
+#   - System config directory: /etc/github-mcp-server/github-mcp-server.yaml
+# Or specify a custom location with the --config flag
+
+# GitHub Personal Access Token (required)
+# This can also be set via the GITHUB_PERSONAL_ACCESS_TOKEN environment variable
+personal_access_token: "ghp_your_token_here"
+
+# Toolsets to enable (comma-separated list or array)
+# Available toolsets: actions, code_scanning, context, discussions, gists, issues, 
+# notifications, pull_requests, repos, secret_scanning, users
+# If not specified, defaults to: context, issues, pull_requests, repos, users
+toolsets:
+  - context
+  - issues
+  - pull_requests
+  - repos
+  - users
+
+# Individual tools to enable (comma-separated list or array)
+# Use this to enable specific tools without enabling entire toolsets
+# Example:
+# tools:
+#   - get_file_contents
+#   - get_me
+#   - search_code
+
+# Feature flags to enable (comma-separated list or array)
+# Example:
+# features:
+#   - experimental_feature_1
+
+# Dynamic toolsets mode (boolean)
+# When enabled, only discovery tools are loaded initially
+# and additional toolsets can be enabled on demand
+dynamic_toolsets: false
+
+# Read-only mode (boolean)
+# When enabled, all write operations are disabled
+read_only: false
+
+# Lockdown mode (boolean)
+# When enabled, limits content from users without push access in public repositories
+lockdown_mode: false
+
+# Insiders mode (boolean)
+# Enables experimental/insider features
+insiders: false
+
+# GitHub Enterprise hostname (optional)
+# Specify a custom GitHub hostname for GitHub Enterprise Server
+# Example: host: "github.mycompany.com"
+# host: ""
+
+# Log file path (optional)
+# Path to write server logs
+# log_file: "/var/log/github-mcp-server.log"
+
+# Enable command logging (boolean)
+# When enabled, logs all command requests and responses
+enable_command_logging: false
+
+# Export translations (boolean)
+# When enabled, exports i18n translations to a JSON file
+export_translations: false
+
+# Content window size (integer)
+# Maximum size of content windows in characters
+content_window_size: 5000
+
+# Repository access cache TTL (duration)
+# How long to cache repository access checks (e.g., "5m", "1h", "0s" to disable)
+repo_access_cache_ttl: 5m
+
+# HTTP server specific configuration
+# These options only apply when running in HTTP mode (github-mcp-server http)
+
+# Port to listen on (integer)
+# port: 8082
+
+# Base URL (string)
+# Public URL where this server is accessible (for OAuth metadata)
+# Example: base_url: "https://mcp.example.com"
+# base_url: ""
+
+# Base path (string)
+# External base path for the HTTP server (for OAuth metadata)
+# Example: base_path: "/api/mcp"
+# base_path: ""
+
+# Scope challenge (boolean)
+# Enable OAuth scope challenge responses
+# scope_challenge: false

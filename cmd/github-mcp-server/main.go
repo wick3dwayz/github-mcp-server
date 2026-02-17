@@ -124,6 +124,7 @@ func init() {
 	rootCmd.SetVersionTemplate("{{.Short}}\n{{.Version}}\n")
 
 	// Add global flags that will be shared by all commands
+	rootCmd.PersistentFlags().String("config", "", "Path to config file (optional, supports YAML and JSON)")
 	rootCmd.PersistentFlags().StringSlice("toolsets", nil, github.GenerateToolsetsHelp())
 	rootCmd.PersistentFlags().StringSlice("tools", nil, "Comma-separated list of specific tools to enable")
 	rootCmd.PersistentFlags().StringSlice("features", nil, "Comma-separated list of feature flags to enable")
@@ -145,6 +146,7 @@ func init() {
 	httpCmd.Flags().Bool("scope-challenge", false, "Enable OAuth scope challenge responses")
 
 	// Bind flag to viper
+	_ = viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 	_ = viper.BindPFlag("toolsets", rootCmd.PersistentFlags().Lookup("toolsets"))
 	_ = viper.BindPFlag("tools", rootCmd.PersistentFlags().Lookup("tools"))
 	_ = viper.BindPFlag("features", rootCmd.PersistentFlags().Lookup("features"))
@@ -172,6 +174,34 @@ func initConfig() {
 	viper.SetEnvPrefix("github")
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv()
+
+	// Check if a config file was specified via the --config flag
+	configFile := viper.GetString("config")
+	if configFile != "" {
+		// Use the specified config file
+		viper.SetConfigFile(configFile)
+	} else {
+		// Search for config file in standard locations
+		viper.SetConfigName("github-mcp-server")
+		viper.SetConfigType("yaml")
+
+		// Search in current directory
+		viper.AddConfigPath(".")
+		// Search in home directory
+		if home, err := os.UserHomeDir(); err == nil {
+			viper.AddConfigPath(home)
+			viper.AddConfigPath(home + "/.config/github-mcp-server")
+		}
+		// Search in /etc
+		viper.AddConfigPath("/etc/github-mcp-server")
+	}
+
+	// Try to read the config file (if it exists)
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Fprintf(os.Stderr, "Using config file: %s\n", viper.ConfigFileUsed())
+	}
+	// Note: We don't error if config file is not found, since config files are optional
+	// and configuration can come from flags or environment variables
 }
 
 func main() {
