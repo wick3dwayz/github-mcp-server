@@ -1,8 +1,4 @@
 {
-  "_comment": "GitHub MCP Server Configuration File (JSON format)",
-  "_comment2": "This file demonstrates all available configuration options",
-  "_comment3": "You can place this file in standard locations or specify with --config flag",
-  
   "personal_access_token": "ghp_your_token_here",
   
   "toolsets": [
@@ -28,7 +24,6 @@
   "content_window_size": 5000,
   "repo_access_cache_ttl": "5m",
   
-  "_http_config": "HTTP server specific configuration (only for 'http' command)",
   "port": 8082,
   "base_url": "",
   "base_path": "",
